@@ -1,0 +1,18 @@
+
+;; ----- smex-history -----
+(
+ todo-mode
+ undo
+ cd
+ 5x5
+ arp
+ dbx
+ dig
+)
+
+;; ----- smex-data -----
+(
+ (undo . 2)
+ (todo-mode . 1)
+ (todo-menu . 1)
+)

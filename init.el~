@@ -1,0 +1,116 @@
+(when (>= emacs-major-version 24)
+  (require 'package)
+  (package-initialize)
+  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+  )
+(require 'cl)
+;;add whatever packages you want here
+(defvar jhon/packages '(
+			company
+			monokai-theme
+			hungry-delete
+			smex
+			swiper
+			counsel
+			smartparens
+			) "Default packages")
+
+;;检查变量中的东西是否全部加载进来
+(defun jhon/packages-installed-p ()
+  (loop for pkg in jhon/packages
+	when (not (package-installed-p pkg)) do (return nil)
+	finally (return t)))
+
+;;如果全部加加载
+(unless (jhon/packages-installed-p)
+  (message "%s" "Resfreshing package database...")
+  (package-refresh-contents)
+  (dolist (pkg jhon/packages)
+    (when (not (package-installed-p pkg))
+      (package-install pkg))))
+
+;;加载hungry-delete 设置全局
+(require 'hungry-delete)
+(global-hungry-delete-mode)
+;;加载 smex config for smex
+(require 'smex)
+(smex-initialize)
+;;(global-set-key (kbd "M-x") 'smex)
+;;config swiper
+(ivy-mode 1)
+(setq ivy-use-virtual-buffers t)
+(global-set-key "\C-s" 'swiper)
+(global-set-key (kbd "C-c C-r") 'ivy-resume)
+(global-set-key (kbd "M-x") 'counsel-M-x)
+(global-set-key (kbd "C-x C-f") 'counsel-find-file)
+(global-set-key (kbd "<f1> f") 'counsel-describe-function)
+(global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+;;config smartparens 括号引号的自动匹配
+(require 'smartparens-config)
+(add-hook 'emacs-lisp-mode-hook 'smartparens-mode)
+
+
+;;关闭工具栏
+(tool-bar-mode -1)
+;;关闭滚动条
+(scroll-bar-mode -1)
+;;自动缩进
+(electric-indent-mode t)
+;;开启行号
+(global-linum-mode t)
+;;打开
+(setq inhibit-splash-screen t)
+;;定义打开配置文件操作
+(defun open-my-init-file()
+  (interactive)
+  (find-file "~/.emacs.d/init.el"))
+;;定义打开配置文件的快捷键是F2
+(global-set-key (kbd "<f2>") 'open-my-init-file)
+(defun open-my-org-file()
+  (interactive)
+  (find-file "C:\Users\Jhon\Documents\orgFiles"))
+;;定义打开org文件夹的快捷键
+(global-set-key (kbd "<f3>") 'open-my-org-file)
+
+
+;;最近打开的文件
+(recentf-mode t)
+;;自动不全模式开启
+(global-company-mode t)
+;;制定光标样式
+(setq-default cursor-type 'bar)
+;;禁止自动备份
+(setq make-backup-files nil)
+(require 'org)
+(setq org-src-fontify-natively t)
+(require 'recentf)
+;;设置最近打开文档的数量
+(setq recentf-max-menu-items 25)
+;;定义最近打开文档的快捷键
+(global-set-key "\C-x\ \C-r" 'recentf-open-files)
+;;替换选中部分
+(delete-selection-mode t)
+;;初始化时使得窗口最大化
+(setq initial-frame-alist (quote ((fullscreen . maximized))))
+
+(add-hook 'emacs-lisp-mode-hook 'show-paren-mode)
+;;高亮当前行
+(global-hl-line-mode t)
+;;设置主题为monokai
+(load-theme 'monokai t)
+
+;;
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(company-idle-delay 0.08)
+ '(show-paren-mode t)
+ '(tool-bar-mode nil))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:family "Inconsolata" :foundry "outline" :slant normal :weight normal :height 143 :width normal)))))
